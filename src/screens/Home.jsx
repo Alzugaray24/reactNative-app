@@ -6,12 +6,6 @@ import { useSelector } from "react-redux";
 import { useGetCategoriesQuery } from "../services/shopServices";
 
 const Home = ({ navigation, route }) => {
-  // const categories = useSelector((state) => state.shop.value.categories);
-
-  const user = useSelector((state) => state.auth.value.user);
-
-  console.log(user);
-
   const { data: categories } = useGetCategoriesQuery();
 
   return (

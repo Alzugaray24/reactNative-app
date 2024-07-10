@@ -4,17 +4,18 @@ import { colors } from "../global/colors";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { decrement, increment, incrementByAmount, reset } from "../features/Counter/CounterSlice";
-
+import {
+  decrement,
+  increment,
+  incrementByAmount,
+  reset,
+} from "../features/Counter/CounterSlice";
 
 const Counter = () => {
-
-  const count = useSelector((state)=> state.counter.value)
-  const dispatch = useDispatch()
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
 
   const [inputToAdd, setInputToAdd] = useState(null);
-  
-  //let count = 0
 
   console.log(count);
 

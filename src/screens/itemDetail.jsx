@@ -2,23 +2,29 @@ import React from "react";
 import { Button, Image, StyleSheet, Text, View } from "react-native";
 import { addCartItem } from "../features/Cart/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { usePostCartItemMutation } from "../services/shopServices";
 import { useGetProductByIdQuery } from "../services/shopServices";
 
 const ItemDetail = ({ navigation, route }) => {
   const { productId } = route.params;
-
-  const { data: product } = useGetProductByIdQuery(productId);
-
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const { data: product } = useGetProductByIdQuery(productId);
+  const [triggerPost, { isLoading, isSuccess, isError, error }] =
+    usePostCartItemMutation();
 
   const onAddCart = () => {
     if (product) {
-      dispatch(addCartItem({ ...product, quantity: 1 })); // Pasamos el producto con la cantidad fija de 1
+      // Agregar producto al carrito local
+      dispatch(addCartItem({ ...product, quantity: 1 }));
+
+      // Enviar el producto al backend
+      const cartItem = { ...product, quantity: 1, user: user };
+      triggerPost(cartItem);
     }
   };
 
   if (!product || !Object.keys(product).length) {
-    // Verifica si product no está definido o es un objeto vacío
     return (
       <View style={styles.container}>
         <Text>No se ha seleccionado ningún producto.</Text>

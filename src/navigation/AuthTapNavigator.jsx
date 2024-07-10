@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import LoginScreen from "../screens/Login"; // Asegúrate de tener estas pantallas creadas
-import SignUpScreen from "../screens/SignUp"; // Asegúrate de tener estas pantallas creadas
+import LoginScreen from "../screens/Login";
+import SignUpScreen from "../screens/SignUp";
 import Header from "../components/Header";
 import { colors } from "../global/colors";
 import { FontAwesome5 } from "@expo/vector-icons";

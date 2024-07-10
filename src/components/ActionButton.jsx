@@ -14,10 +14,9 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     padding: 15,
-    backgroundColor: colors.green700, // Ajusta el color según tu esquema de colores
+    backgroundColor: colors.green700,
     alignItems: "center",
     borderRadius: 5,
-    marginTop: 20,
   },
   buttonText: {
     color: "white",

@@ -3,9 +3,6 @@ import React from "react";
 import Card from "./Card";
 import { colors } from "../global/colors";
 
-import { useDispatch } from "react-redux";
-import { setProductById } from "../features/Shop/ShopSlice";
-
 const ProductItem = ({ product, navigation }) => {
   const handleNavigate = () => {
     navigation.navigate("ItemDetail", { productId: product.id });

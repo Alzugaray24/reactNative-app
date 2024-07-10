@@ -1,22 +1,18 @@
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { colors } from "../global/colors";
 
 const OrderItem = ({ order }) => {
-  const total = order.items.reduce(
-    (acc, currentItem) => (acc += currentItem.price * currentItem.quantity),
-    0
-  );
-
   return (
-    <View style={styles.card} onPress={() => {}}>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>
-          {new Date(order.createdAt).toLocaleString()}
-        </Text>
-        <Text style={styles.text2}>${total}</Text>
-      </View>
-      <Feather name="search" size={30} color="black" />
+    <View style={styles.container}>
+      <Text style={styles.title}>Order for: {order.user}</Text>
+      <Text style={styles.total}>Total: ${order.total}</Text>
+      {order.cartItems.map((item, index) => (
+        <View key={index} style={styles.itemContainer}>
+          <Text style={styles.itemTitle}>{item.title}</Text>
+          <Text>Quantity: {item.quantity}</Text>
+          <Text>Price: ${item.price}</Text>
+        </View>
+      ))}
     </View>
   );
 };
@@ -24,31 +20,39 @@ const OrderItem = ({ order }) => {
 export default OrderItem;
 
 const styles = StyleSheet.create({
-  card: {
-    height: 100,
-    backgroundColor: colors.gray100,
+  container: {
+    borderWidth: 1,
+    borderColor: "#ddd",
     padding: 10,
-    margin: 10,
-    borderWidth: 2,
-    borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    marginVertical: 5,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  textContainer: {
-    width: "70%",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
   },
-  text: {
-    fontFamily: "Josefin",
-    fontSize: 17,
-    color: "black",
+  total: {
+    fontSize: 14,
+    marginBottom: 10,
   },
-  text2: {
-    fontFamily: "Josefin",
-    fontSize: 19,
-    color: "gray",
+  itemContainer: {
+    marginBottom: 10,
+    padding: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
+  },
+  itemTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });

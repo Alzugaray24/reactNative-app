@@ -12,8 +12,6 @@ const ItemListCategory = ({ navigation, route }) => {
     (state) => state.shop.value.categorySelected
   );
 
-  // const products = useSelector((state) => state.shop.value.filteredProducts);
-
   const { data: products } = useGetProductsByCategoryQuery(categorySelected);
 
   const dispatch = useDispatch();

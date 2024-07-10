@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Alert } from "react-native";
 import InputText from "../components/InputText";
 import ActionButton from "../components/ActionButton";
 import { colors } from "../global/colors";
 import { useLoginMutation } from "../services/authServices";
-import { Alert } from "react-native";
 import { setUser } from "../features/Auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { loginSchema } from "../validations/auth/loginSchema";
+import { decodeJwtToken } from "../utils/jwtDecode";
 
 const LoginScreen = ({ navigator }) => {
   const [email, setEmail] = useState("");
@@ -26,22 +26,38 @@ const LoginScreen = ({ navigator }) => {
         email,
         password,
       });
+
       if (result.error) {
         throw new Error(result.error.message);
       }
-      dispatch(setUser(result));
+
+      const { idToken, email: userEmail } = result.data;
+
+      // Decodificar el token manualmente
+      const decodedToken = decodeJwtToken(idToken);
+
+      dispatch(
+        setUser({
+          data: { idToken, email: userEmail, localId: decodedToken.user_id },
+        })
+      );
+
       Alert.alert("Éxito", "Inicio de sesión exitoso");
     } catch (error) {
-      switch (error.path) {
-        case "email":
-          setErrorEmail(error.message);
-          break;
-        case "password":
-          setErrorPassword(error.message);
-          break;
-        default:
-          Alert.alert("Error", "El email o contraseña no son validos");
-          break;
+      if (error.path) {
+        switch (error.path) {
+          case "email":
+            setErrorEmail(error.message);
+            break;
+          case "password":
+            setErrorPassword(error.message);
+            break;
+          default:
+            Alert.alert("Error", "El email o contraseña no son válidos");
+            break;
+        }
+      } else {
+        Alert.alert("Error", "Error al iniciar sesion");
       }
     }
   };

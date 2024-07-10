@@ -7,12 +7,12 @@ export const shopSlice = createSlice({
   initialState: {
     value: {
       categorySelected: "",
-      productSelected: {}, // Inicialmente vacío
+      productSelected: {},
       idSelected: "",
-      products: productsData, // Todos los productos
+      products: productsData,
       categories: categoryData,
-      keyBoard: [], // Estado para almacenar el teclado (keyboard)
-      filteredProducts: [], // Estado para los productos filtrados
+      keyBoard: [],
+      filteredProducts: [],
     },
   },
   reducers: {
@@ -26,12 +26,12 @@ export const shopSlice = createSlice({
           (item) => item.category === category
         );
         state.value.products = productsFiltered;
-        state.value.filteredProducts = productsFiltered; // Actualiza los productos filtrados
-        state.value.categorySelected = category; // Actualiza la categoría seleccionada
+        state.value.filteredProducts = productsFiltered;
+        state.value.categorySelected = category;
       } else {
-        state.value.products = productsData; // Mostrar todos los productos si no hay categoría seleccionada
-        state.value.filteredProducts = []; // Reinicia los productos filtrados
-        state.value.categorySelected = ""; // Reinicia la categoría seleccionada
+        state.value.products = productsData;
+        state.value.filteredProducts = [];
+        state.value.categorySelected = "";
       }
     },
     setKeyboard: (state, action) => {

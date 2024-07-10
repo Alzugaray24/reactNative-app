@@ -1,49 +1,109 @@
-import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import CartItem from "../components/CartItem";
-import { useSelector } from "react-redux";
-import { usePostOrderMutation } from "../services/shopServices";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  usePostOrderMutation,
+  useGetCartItemsByUserQuery,
+} from "../services/shopServices";
+import { clearCart, setCartItems } from "../features/Cart/CartSlice";
 import { colors } from "../global/colors";
+import { addOrderItem } from "../features/Order/OrderSlice";
 
-const Cart = () => {
+const CartScreen = () => {
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const cartItems = useSelector((state) => state.cart.value.items);
   const total = useSelector((state) => state.cart.value.total);
+  const user = useSelector((state) => state.auth.user);
+  const [postOrder] = usePostOrderMutation();
+  const dispatch = useDispatch();
+  const {
+    data: cartData,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetCartItemsByUserQuery(user);
 
-  const [triggerPost, result] = usePostOrderMutation();
+  useEffect(() => {
+    if (cartData) {
+      dispatch(setCartItems(cartData));
+    }
+  }, [dispatch, cartData]);
 
-  const confirmCart = () => {
-    triggerPost({ total, cartItems, user: "loggedUser" });
-    console.log("Order confirmed");
+  const confirmCart = async () => {
+    try {
+      dispatch(addOrderItem({ total, cartItems, user }));
+      await postOrder({ total, cartItems, user });
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        dispatch(clearCart());
+      }, 3000);
+    } catch (error) {
+      console.error("Error confirming order:", error);
+    }
   };
 
   return (
     <View style={styles.container}>
-      {cartItems.length === 0 ? (
-        <View style={styles.emptyCartContainer}>
-          <Text style={styles.emptyCartText}>
-            No hay ningún producto en el carrito
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.green700} />
+        </View>
+      )}
+      {showSuccessMessage && (
+        <View style={styles.successContainer}>
+          <Text style={styles.successText}>
+            ¡Orden confirmada exitosamente!
           </Text>
         </View>
-      ) : (
+      )}
+      {isError && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>
+            Error al confirmar la orden: {error.message}
+          </Text>
+        </View>
+      )}
+      {!isLoading && !showSuccessMessage && !isError && (
         <View style={styles.cartContent}>
-          <FlatList
-            data={cartItems}
-            renderItem={({ item }) => <CartItem cartItem={item} />}
-            keyExtractor={(product) => product.id}
-          />
+          {cartItems.length === 0 ? (
+            <View style={styles.emptyCartContainer}>
+              <Text style={styles.emptyCartText}>
+                No hay productos en el carrito
+              </Text>
+            </View>
+          ) : (
+            <>
+              <FlatList
+                data={cartItems}
+                renderItem={({ item }) => <CartItem cartItem={item} />}
+                keyExtractor={(item) => item.id}
+              />
 
-          <View style={styles.orderSummary}>
-            <Pressable style={styles.confirmButton} onPress={confirmCart}>
-              <Text style={styles.confirmButtonText}>Confirm Order</Text>
-            </Pressable>
-            <Text style={styles.totalText}>Total: $ {total}</Text>
-          </View>
+              <View style={styles.orderSummary}>
+                <Pressable style={styles.confirmButton} onPress={confirmCart}>
+                  <Text style={styles.confirmButtonText}>Confirmar Orden</Text>
+                </Pressable>
+                <Text style={styles.totalText}>Total: $ {total}</Text>
+              </View>
+            </>
+          )}
         </View>
       )}
     </View>
   );
 };
 
-export default Cart;
+export default CartScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -51,6 +111,29 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 20,
     backgroundColor: "#f5f5f5",
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  successContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  successText: {
+    fontSize: 18,
+    color: colors.green700,
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  errorText: {
+    fontSize: 18,
+    color: "red",
   },
   emptyCartContainer: {
     flex: 1,

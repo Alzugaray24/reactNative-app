@@ -4,13 +4,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStackNavigator from "./HomeStackNavigator";
 import CartStackNavigator from "./CartStackNavigator";
 import OrderStackNavigator from "./OrderStackNavigator";
-/* import Cart from '../screens/Cart'
-import Order from '../screens/Order' */
-//import { Header } from 'react-native/Libraries/NewAppScreen'
 import Header from "../components/Header";
 import { colors } from "../global/colors";
 
 import { FontAwesome5 } from "@expo/vector-icons";
+import ProfileStackNavigator from "./ProfileStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -68,6 +66,23 @@ const BottomTapNavigator = () => {
               <View>
                 <FontAwesome5
                   name="receipt"
+                  size={24}
+                  color={focused ? "black" : colors.lightGray}
+                />
+              </View>
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="profile"
+        component={ProfileStackNavigator}
+        options={{
+          tabBarIcon: ({ focused }) => {
+            return (
+              <View>
+                <FontAwesome5
+                  name="user-alt"
                   size={24}
                   color={focused ? "black" : colors.lightGray}
                 />

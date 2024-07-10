@@ -3,6 +3,7 @@ import counterReducer from "../features/Counter/CounterSlice";
 import shopReducer from "../features/Shop/ShopSlice";
 import cartReducer from "../features/Cart/CartSlice";
 import authReducer from "../features/Auth/AuthSlice";
+import orderReducer from "../features/Order/OrderSlice";
 
 import { shopApi } from "../services/shopServices";
 import { authApi } from "../services/authServices";
@@ -14,6 +15,7 @@ const store = configureStore({
     shop: shopReducer,
     cart: cartReducer,
     auth: authReducer,
+    order: orderReducer,
     [shopApi.reducerPath]: shopApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
   },
