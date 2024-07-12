@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Alert } from "react-native";
 import InputText from "../components/InputText";
 import ActionButton from "../components/ActionButton";
@@ -8,15 +8,33 @@ import { setUser } from "../features/Auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { loginSchema } from "../validations/auth/loginSchema";
 import { decodeJwtToken } from "../utils/jwtDecode";
+import { querySessions, insertSession } from "../db";
 
-const LoginScreen = ({ navigator }) => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [triggerLogin, result] = useLoginMutation();
   const [errorEmail, setErrorEmail] = useState(null);
   const [errorPassword, setErrorPassword] = useState(null);
+  const [existingSession, setExistingSession] = useState(false);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    checkExistingSession();
+  }, []);
+
+  const checkExistingSession = async () => {
+    try {
+      const sessions = await querySessions();
+
+      if (sessions.length > 0) {
+        setExistingSession(true);
+      }
+    } catch (error) {
+      Alert.alert({ errorCheckExistingSession: error.message });
+    }
+  };
 
   const handleLogin = async () => {
     try {
@@ -31,19 +49,33 @@ const LoginScreen = ({ navigator }) => {
         throw new Error(result.error.message);
       }
 
-      const { idToken, email: userEmail } = result.data;
+      const decodedToken = decodeJwtToken(result.data.idToken);
 
-      // Decodificar el token manualmente
-      const decodedToken = decodeJwtToken(idToken);
+      if (!existingSession) {
+        await insertSession({
+          email: result.data.email,
+          localId: decodedToken.user_id,
+          token: result.data.idToken,
+        })
+          .then((result) => {})
+          .catch((err) => {
+            Alert.alert({ errInsertData: err.message });
+          });
+      } else {
+        Alert.alert("Ya hay una sesion activa");
+      }
 
       dispatch(
         setUser({
-          data: { idToken, email: userEmail, localId: decodedToken.user_id },
+          email: result.data.email,
+          localId: decodedToken.user_id,
+          token: result.data.idToken,
         })
       );
 
       Alert.alert("Éxito", "Inicio de sesión exitoso");
     } catch (error) {
+      Alert.alert("Error durante el proceso de login:", error);
       if (error.path) {
         switch (error.path) {
           case "email":
@@ -57,14 +89,14 @@ const LoginScreen = ({ navigator }) => {
             break;
         }
       } else {
-        Alert.alert("Error", "Error al iniciar sesion");
+        Alert.alert("Error", "Error al iniciar sesión");
       }
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesion</Text>
+      <Text style={styles.title}>Iniciar Sesión</Text>
       <InputText
         error={errorEmail}
         placeholder="Email"
@@ -74,7 +106,7 @@ const LoginScreen = ({ navigator }) => {
         autoCapitalize="none"
       />
       <InputText
-        placeholder="Password"
+        placeholder="Contraseña"
         value={password}
         onChangeText={setPassword}
         secureTextEntry

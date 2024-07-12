@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { decodeJwtToken } from "../../utils/jwtDecode";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -8,32 +7,40 @@ export const authSlice = createSlice({
     token: null,
     localId: null,
     imageCamara: null,
-    profileImage: null, // Nuevo estado para la imagen de perfil
+    profileImage: null,
   },
   reducers: {
     setUser: (state, action) => {
-      const decodedToken = decodeJwtToken(action.payload.data.idToken);
-      state.user = action.payload.data.email;
-      state.token = action.payload.data.idToken;
-      state.localId = decodedToken.user_id; // Almacenar el localId
+      state.user = action.payload.email;
+      state.token = action.payload.idToken;
+      state.localId = action.payload.localId;
+    },
+    setLogout: (state, action) => {
+      state.user = null;
+      state.token = null;
+      state.localId = null;
     },
     clearUser: (state) => {
       state.user = null;
       state.token = null;
       state.localId = null;
-      state.profileImage = null; // Limpiar la imagen de perfil al salir de sesión
+      state.profileImage = null;
     },
     setImageCamara: (state, action) => {
       state.imageCamara = action.payload;
     },
     setImageProfile: (state, action) => {
-      console.log("entrex");
-      state.profileImage = action.payload; // Establecer la imagen de perfil
+      state.profileImage = action.payload;
     },
   },
 });
 
-export const { setUser, clearUser, setImageCamara, setImageProfile } =
-  authSlice.actions;
+export const {
+  setUser,
+  setLogout,
+  clearUser,
+  setImageCamara,
+  setImageProfile,
+} = authSlice.actions;
 
 export default authSlice.reducer;

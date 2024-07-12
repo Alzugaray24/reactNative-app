@@ -13,6 +13,7 @@ import Navigator from "./src/navigation/Navigator";
 
 import { Provider } from "react-redux";
 import store from "./src/store";
+import { init } from "./src/db";
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -22,6 +23,13 @@ export default function App() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
+
+  init()
+    .then(() => console.log("DB initialized"))
+    .catch((err) => {
+      console.log("Initialization DB failed");
+      console.log(err.message);
+    });
 
   return (
     <SafeAreaView style={styles.container}>

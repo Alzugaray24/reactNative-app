@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   isLoading,
   isError,
+  Alert,
 } from "react-native";
 import CartItem from "../components/CartItem";
 import { useSelector, useDispatch } from "react-redux";
@@ -38,7 +39,7 @@ const CartScreen = () => {
         dispatch(clearCart());
       }, 3000);
     } catch (error) {
-      console.error("Error confirming order:", error);
+      Alert.alert("Error al confirmar la orden", error);
     }
   };
 

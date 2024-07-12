@@ -1,11 +1,21 @@
 import React, { useEffect } from "react";
-import { Image, StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { colors } from "../global/colors";
 import AddButton from "../components/AddButton";
 import { useGetProfileImageQuery } from "../services/shopServices";
 import { setImageProfile } from "../features/Auth/AuthSlice";
 import { getLastProfileImage } from "../utils/lastImageSelector";
+import { logoutSession } from "../db";
+import { setLogout } from "../features/Auth/AuthSlice";
+import { querySessions } from "../db";
 
 const ProfileScreen = ({ navigation }) => {
   const user = useSelector((state) => state.auth.user);
@@ -30,6 +40,22 @@ const ProfileScreen = ({ navigation }) => {
       );
     }
 
+    const onLogout = async () => {
+      try {
+        const sessions = await querySessions();
+        if (sessions.length > 0) {
+          const localId = sessions[0].localId;
+          const result = await logoutSession(localId);
+          dispatch(setLogout());
+          Alert.alert("Sesion cerrada con exito");
+        } else {
+          Alert.alert("No se encontraron sesiones.");
+        }
+      } catch (error) {
+        Alert.alert("Error al cerrar sesión:", error);
+      }
+    };
+
     return (
       <View style={styles.container}>
         <Image
@@ -48,6 +74,8 @@ const ProfileScreen = ({ navigation }) => {
           title="My Address"
           onPress={() => navigation.navigate("LocationSelector")}
         />
+
+        <AddButton title="Logout" onPress={() => onLogout()} />
         <Text>Email: {user}</Text>
       </View>
     );
