@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import AddButton from "../components/AddButton";
 import { useDispatch } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
-import { setImageCamara } from "../features/Auth/AuthSlice";
+import { setImageCamara, setImageProfile } from "../features/Auth/AuthSlice";
 import { usePostProfileImageMutation } from "../services/shopServices";
 import { useSelector } from "react-redux";
 
@@ -42,7 +42,7 @@ const ImageSelectorScreen = ({ navigation }) => {
   };
 
   const confirmImage = async () => {
-    dispatch(setImageCamara(image));
+    dispatch(setImageProfile(image));
     triggerSaveProfileImage({ image, localId });
     navigation.goBack();
   };

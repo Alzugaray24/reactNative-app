@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { colors } from "../global/colors";
 import Search from "../components/Search";
@@ -12,19 +12,25 @@ const ItemListCategory = ({ navigation, route }) => {
     (state) => state.shop.value.categorySelected
   );
 
+  const filteredProducts = useSelector(
+    (state) => state.shop.value.filteredProducts
+  );
+
   const { data: products } = useGetProductsByCategoryQuery(categorySelected);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setProductsByCategory(categorySelected));
-  }, [categorySelected, dispatch]);
+    if (products) {
+      dispatch(setProductsByCategory(categorySelected));
+    }
+  }, [categorySelected, dispatch, products]);
 
   return (
     <View style={styles.flatListContainer}>
       <Search goBack={() => navigation.goBack()} />
       <FlatList
-        data={products}
+        data={filteredProducts}
         renderItem={({ item }) => (
           <ProductItem product={item} navigation={navigation} />
         )}

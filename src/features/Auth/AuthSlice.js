@@ -27,6 +27,7 @@ export const authSlice = createSlice({
       state.imageCamara = action.payload;
     },
     setImageProfile: (state, action) => {
+      console.log("entrex");
       state.profileImage = action.payload; // Establecer la imagen de perfil
     },
   },

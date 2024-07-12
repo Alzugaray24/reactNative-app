@@ -11,7 +11,6 @@ export const shopSlice = createSlice({
       idSelected: "",
       products: productsData,
       categories: categoryData,
-      keyBoard: [],
       filteredProducts: [],
     },
   },
@@ -34,17 +33,17 @@ export const shopSlice = createSlice({
         state.value.categorySelected = "";
       }
     },
-    setKeyboard: (state, action) => {
-      const word = action.payload;
+    setFilteredProductsByWord: (state, action) => {
+      const products = action.payload.products;
+      const word = action.payload.keyword;
       if (word) {
-        const productsByWord = state.value.products.filter((item) =>
-          item.title.toLowerCase().includes(word.toLowerCase())
-        );
-        state.value.filteredProducts = productsByWord;
+        const filtered = products.filter((prod) => {
+          return prod.title.includes(word);
+        });
+        state.value.filteredProducts = filtered;
       } else {
-        state.value.filteredProducts = state.value.products;
+        state.value.filteredProducts = products;
       }
-      state.value.keyBoard = word;
     },
     setProductById: (state, action) => {
       const id = action.payload;
@@ -63,8 +62,9 @@ export const shopSlice = createSlice({
 export const {
   setCategorySelected,
   setProductsByCategory,
-  setKeyboard,
+  setSearchWord,
   setProductById,
+  setFilteredProductsByWord,
 } = shopSlice.actions;
 
 export default shopSlice.reducer;

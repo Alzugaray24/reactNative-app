@@ -1,21 +1,23 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { colors } from "../global/colors";
-import { useState } from "react";
-
-import { FontAwesome5 } from "@expo/vector-icons";
+import { useEffect, useState, useCallback } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { useDispatch } from "react-redux";
-import { setKeyboard } from "../features/Shop/ShopSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilteredProductsByWord } from "../features/Shop/ShopSlice";
 
 const Search = ({ error = "", goBack = () => {} }) => {
   const [keyword, setKeyword] = useState("");
-
   const dispatch = useDispatch();
+  const products = useSelector((state) => state.shop.value.products);
 
-  const onSearch = (keyword) => {
-    dispatch(setKeyboard(keyword));
-  };
+  const filterProducts = useCallback(() => {
+    dispatch(setFilteredProductsByWord({ keyword, products }));
+  }, [dispatch, keyword, products]);
+
+  useEffect(() => {
+    filterProducts();
+  }, [filterProducts]);
 
   return (
     <View style={styles.container}>
@@ -29,9 +31,6 @@ const Search = ({ error = "", goBack = () => {} }) => {
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
 
-      <Pressable onPress={() => onSearch(keyword)}>
-        <FontAwesome5 name="search" size={24} color="black" />
-      </Pressable>
       <Pressable onPress={() => setKeyword("")}>
         <FontAwesome6 name="eraser" size={24} color="black" />
       </Pressable>

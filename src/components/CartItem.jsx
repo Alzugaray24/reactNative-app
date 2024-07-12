@@ -3,17 +3,12 @@ import { Entypo } from "@expo/vector-icons";
 import { colors } from "../global/colors";
 import { useDispatch } from "react-redux";
 import { removeCartItem } from "../features/Cart/CartSlice";
-import { useRemoveCartItemMutation } from "../services/shopServices";
 
 const CartItem = ({ cartItem }) => {
   const dispatch = useDispatch();
-  const [removeCartItemMutation] = useRemoveCartItemMutation();
-
-  console.log(cartItem.id);
 
   const onTrash = async () => {
     try {
-      await removeCartItemMutation(cartItem.id).unwrap();
       dispatch(removeCartItem(cartItem));
     } catch (error) {
       console.error("Failed to remove cart item: ", error);

@@ -53,9 +53,16 @@ export const shopApi = createApi({
       },
     }),
 
-    removeCartItem: builder.mutation({
-      query: (itemId) => ({
+    removeCartItemById: builder.mutation({
+      query: ({ itemId }) => ({
         url: `cart/${itemId}.json`,
+        method: "DELETE",
+      }),
+    }),
+
+    removeOrderById: builder.mutation({
+      query: ({ orderId }) => ({
+        url: `orders/${orderId}.json`,
         method: "DELETE",
       }),
     }),
@@ -98,5 +105,5 @@ export const {
   usePostOrderMutation,
   useGetProfileImageQuery,
   usePostProfileImageMutation,
-  useRemoveCartItemMutation,
+  useRemoveCartItemByIdMutation,
 } = shopApi;

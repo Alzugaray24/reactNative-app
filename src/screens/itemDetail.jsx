@@ -1,5 +1,13 @@
 import React from "react";
-import { Button, Image, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  isError,
+  isLoading,
+} from "react-native";
 import { addCartItem } from "../features/Cart/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { usePostCartItemMutation } from "../services/shopServices";
@@ -7,20 +15,12 @@ import { useGetProductByIdQuery } from "../services/shopServices";
 
 const ItemDetail = ({ navigation, route }) => {
   const { productId } = route.params;
-  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const { data: product } = useGetProductByIdQuery(productId);
-  const [triggerPost, { isLoading, isSuccess, isError, error }] =
-    usePostCartItemMutation();
 
-  const onAddCart = () => {
+  const onAddCart = async () => {
     if (product) {
-      // Agregar producto al carrito local
       dispatch(addCartItem({ ...product, quantity: 1 }));
-
-      // Enviar el producto al backend
-      const cartItem = { ...product, quantity: 1, user: user };
-      triggerPost(cartItem);
     }
   };
 
@@ -46,6 +46,8 @@ const ItemDetail = ({ navigation, route }) => {
         <Text style={styles.description}>{product.description}</Text>
         <Text style={styles.price}>${product.price}</Text>
         <Button title="Agregar al carrito" onPress={onAddCart} />
+        {isLoading && <Text>Cargando...</Text>}
+        {isError && <Text>Error: {error.message}</Text>}
       </View>
     </View>
   );

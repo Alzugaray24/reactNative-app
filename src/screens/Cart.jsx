@@ -6,6 +6,8 @@ import {
   FlatList,
   Pressable,
   ActivityIndicator,
+  isLoading,
+  isError,
 } from "react-native";
 import CartItem from "../components/CartItem";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,29 +21,17 @@ import { addOrderItem } from "../features/Order/OrderSlice";
 
 const CartScreen = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const cartItems = useSelector((state) => state.cart.value.items);
   const total = useSelector((state) => state.cart.value.total);
   const user = useSelector((state) => state.auth.user);
   const [postOrder] = usePostOrderMutation();
   const dispatch = useDispatch();
-  const {
-    data: cartData,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetCartItemsByUserQuery(user);
-
-  useEffect(() => {
-    if (cartData) {
-      dispatch(setCartItems(cartData));
-    }
-  }, [dispatch, cartData]);
+  const cartItems = useSelector((state) => state.cart.value.items);
 
   const confirmCart = async () => {
     try {
       dispatch(addOrderItem({ total, cartItems, user }));
       await postOrder({ total, cartItems, user });
+
       setShowSuccessMessage(true);
       setTimeout(() => {
         setShowSuccessMessage(false);
