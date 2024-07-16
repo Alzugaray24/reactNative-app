@@ -52,15 +52,15 @@ const ImageSelectorScreen = ({ navigation }) => {
       {image === null ? (
         <>
           <View style={styles.noImgContainer}>
-            <Text>No photo to show...</Text>
+            <Text>No hay ninguna foto...</Text>
           </View>
-          <AddButton title="Take a photo" onPress={pickImage} />
+          <AddButton title="Tomar una foto" onPress={pickImage} />
         </>
       ) : (
         <>
           <Image source={{ uri: image }} style={styles.img} />
-          <AddButton title="Take another photo" onPress={pickImage} />
-          <AddButton title="Confirm photo" onPress={confirmImage} />
+          <AddButton title="Tomar otra foto" onPress={pickImage} />
+          <AddButton title="Confirmar foto" onPress={confirmImage} />
         </>
       )}
     </View>

@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
   },
   emptyCartText: {
     fontSize: 18,
-    color: colors.green700,
   },
   cartContent: {
     flex: 1,

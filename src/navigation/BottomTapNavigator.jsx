@@ -16,21 +16,21 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        header: () => <Header title={route.name} />,
+        header: () => <Header title={getTitle(route.name)} />, // Dynamic title based on route name
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "Shop") {
+          if (route.name === "Tienda") {
             iconName = "store";
-          } else if (route.name === "Cart") {
+          } else if (route.name === "Carrito de Compras") {
             iconName = "shopping-cart";
-          } else if (route.name === "Order") {
+          } else if (route.name === "Ordenes de Compra") {
             iconName = "receipt";
-          } else if (route.name === "Favorite") {
+          } else if (route.name === "Productos Favoritos") {
             iconName = "heart";
-          } else if (route.name === "profile") {
+          } else if (route.name === "Mi Perfil") {
             iconName = "user-alt";
           }
 
@@ -46,13 +46,24 @@ const BottomTabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="Shop" component={HomeStackNavigator} />
-      <Tab.Screen name="Cart" component={CartStackNavigator} />
-      <Tab.Screen name="Order" component={OrderStackNavigator} />
-      <Tab.Screen name="Favorite" component={FavoriteStackNavigator} />
-      <Tab.Screen name="profile" component={ProfileStackNavigator} />
+      <Tab.Screen name="Tienda" component={HomeStackNavigator} />
+      <Tab.Screen name="Carrito de Compras" component={CartStackNavigator} />
+      <Tab.Screen name="Ordenes de Compra" component={OrderStackNavigator} />
+      <Tab.Screen
+        name="Productos Favoritos"
+        component={FavoriteStackNavigator}
+      />
+      <Tab.Screen name="Mi Perfil" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );
+};
+
+const getTitle = (routeName) => {
+  if (routeName === "Tienda") {
+    return "Thot Computación"; // Set your store name here
+  } else {
+    return routeName; // Default to route name if not specified
+  }
 };
 
 const styles = StyleSheet.create({

@@ -67,15 +67,15 @@ const ProfileScreen = ({ navigation }) => {
           style={styles.img}
         />
         <AddButton
-          title="Add profile picture"
+          title="Agregar foto de perfil"
           onPress={() => navigation.navigate("ImageSelector")}
         />
         <AddButton
-          title="My Address"
+          title="Mi dirección"
           onPress={() => navigation.navigate("LocationSelector")}
         />
 
-        <AddButton title="Logout" onPress={() => onLogout()} />
+        <AddButton title="Cerrar Sesión" onPress={() => onLogout()} />
         <Text style={styles.emailText}>
           <Text style={styles.emailLabel}>Email:</Text>{" "}
           <Text style={styles.emailValue}>{user}</Text>

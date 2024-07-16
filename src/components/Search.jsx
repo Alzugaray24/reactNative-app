@@ -8,7 +8,7 @@ import { colors } from "../global/colors";
 const Search = ({ error = "", goBack = () => {} }) => {
   const [keyword, setKeyword] = useState("");
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.shop.value.products);
+  const products = useSelector((state) => state.shop.products);
 
   const filterProducts = useCallback(() => {
     dispatch(setFilteredProductsByWord({ keyword, products }));

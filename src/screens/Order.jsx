@@ -49,7 +49,11 @@ const Order = () => {
           renderItem={({ item }) => <OrderItem order={item} />}
         />
       ) : (
-        <Text>No orders found</Text>
+        <View style={styles.noOrders}>
+          <Text style={styles.contentText}>
+            No se encontaron ordenes de compra
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -61,6 +65,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 30,
+  },
+  noOrders: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  contentText: {
+    fontSize: 18,
   },
   loadingContainer: {
     flex: 1,

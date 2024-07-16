@@ -37,7 +37,7 @@ const FavoriteScreen = () => {
           renderItem={({ item }) => <FavItem product={item} />}
         />
       ) : (
-        <Text>No hay productos favoritos</Text>
+        <Text style={styles.contentText}>No hay productos favoritos</Text>
       )}
     </View>
   );
@@ -50,5 +50,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  contentText: {
+    fontSize: 18,
   },
 });

@@ -2,6 +2,7 @@ import React from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import Card from "./Card";
 import { colors } from "../global/colors";
+import { useSelector } from "react-redux";
 
 const ProductItem = ({ product, navigation }) => {
   const handleNavigate = () => {

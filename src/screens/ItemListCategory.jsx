@@ -4,27 +4,25 @@ import { colors } from "../global/colors";
 import Search from "../components/Search";
 import ProductItem from "../components/ProductItem.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { setProductsByCategory } from "../features/Shop/ShopSlice.js";
+import {
+  setProductsByCategory,
+  setProducts,
+} from "../features/Shop/ShopSlice.js";
 import { useGetProductsByCategoryQuery } from "../services/shopServices.js";
 
 const ItemListCategory = ({ navigation, route }) => {
-  const categorySelected = useSelector(
-    (state) => state.shop.value.categorySelected
-  );
-
-  const filteredProducts = useSelector(
-    (state) => state.shop.value.filteredProducts
-  );
+  const categorySelected = useSelector((state) => state.shop.categorySelected);
+  const filteredProducts = useSelector((state) => state.shop.filteredProducts);
 
   const { data: products } = useGetProductsByCategoryQuery(categorySelected);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (products) {
+      dispatch(setProducts(products));
       dispatch(setProductsByCategory(categorySelected));
     }
-  }, [categorySelected, dispatch, products]);
+  }, [products, categorySelected, dispatch]);
 
   return (
     <View style={styles.flatListContainer}>

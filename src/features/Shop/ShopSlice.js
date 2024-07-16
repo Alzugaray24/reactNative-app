@@ -1,75 +1,70 @@
 import { createSlice } from "@reduxjs/toolkit";
-import productsData from "../../data/products.json";
-import categoryData from "../../data/categories.json";
 
-export const shopSlice = createSlice({
+const shopSlice = createSlice({
   name: "shop",
   initialState: {
-    value: {
-      categorySelected: "",
-      productSelected: {},
-      idSelected: "",
-      products: productsData,
-      categories: categoryData,
-      filteredProducts: [],
-      favoriteItems: [],
-    },
+    categorySelected: "",
+    productSelected: {},
+    idSelected: "",
+    products: [],
+    categories: [],
+    filteredProducts: [],
+    favoriteItems: [],
   },
   reducers: {
     setCategorySelected: (state, action) => {
-      state.value.categorySelected = action.payload;
+      state.categorySelected = action.payload;
     },
     setProductsByCategory: (state, action) => {
       const category = action.payload;
       if (category) {
-        const productsFiltered = productsData.filter(
+        const productsFiltered = state.products.filter(
           (item) => item.category === category
         );
-        state.value.products = productsFiltered;
-        state.value.filteredProducts = productsFiltered;
-        state.value.categorySelected = category;
+        state.filteredProducts = productsFiltered;
       } else {
-        state.value.products = productsData;
-        state.value.filteredProducts = [];
-        state.value.categorySelected = "";
+        state.filteredProducts = state.products;
       }
     },
     setFilteredProductsByWord: (state, action) => {
-      const products = action.payload.products;
-      const word = action.payload.keyword;
-      if (word) {
-        const filtered = products.filter((prod) => {
-          return prod.title.includes(word);
-        });
-        state.value.filteredProducts = filtered;
+      const { products, keyword } = action.payload;
+      if (keyword) {
+        const filtered = products.filter((prod) =>
+          prod.title.includes(keyword)
+        );
+        state.filteredProducts = filtered;
       } else {
-        state.value.filteredProducts = products;
+        state.filteredProducts = products;
       }
     },
     setProductById: (state, action) => {
       const id = action.payload;
       if (id) {
-        const selectedProd = state.value.products.find(
-          (item) => item.id === id
-        );
-        state.value.productSelected = selectedProd || {};
+        const selectedProd = state.products.find((item) => item.id === id);
+        state.productSelected = selectedProd || {};
       } else {
-        state.value.productSelected = {};
+        state.productSelected = {};
       }
     },
     setFavoriteItems: (state, action) => {
-      const product = action.payload.favorite;
+      const product = action.payload;
       if (product) {
-        const favoriteProds = state.value.favoriteItems;
-        const existe = favoriteProds.some((item) => item.id === product.id);
-        if (!existe) {
-          state.value.favoriteItems = [...favoriteProds, product];
+        const favoriteProds = state.favoriteItems;
+        const exists = favoriteProds.some((item) => item.id === product.id);
+        if (!exists) {
+          state.favoriteItems = [...favoriteProds, product];
         } else {
-          state.value.favoriteItems = favoriteProds.filter(
+          state.favoriteItems = favoriteProds.filter(
             (item) => item.id !== product.id
           );
         }
       }
+    },
+    setProducts: (state, action) => {
+      state.products = action.payload;
+    },
+    setCategories: (state, action) => {
+      state.categories = action.payload;
     },
   },
 });
@@ -77,10 +72,11 @@ export const shopSlice = createSlice({
 export const {
   setCategorySelected,
   setProductsByCategory,
-  setSearchWord,
-  setProductById,
   setFilteredProductsByWord,
+  setProductById,
   setFavoriteItems,
+  setProducts,
+  setCategories,
 } = shopSlice.actions;
 
 export default shopSlice.reducer;
