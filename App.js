@@ -1,10 +1,10 @@
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   View,
   SafeAreaView,
   StatusBar,
   Platform,
-  Text,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { colors } from "./src/global/colors";
@@ -16,20 +16,26 @@ import store from "./src/store";
 import { init } from "./src/db";
 
 export default function App() {
-  const [fontsLoaded, fontError] = useFonts({
+  const [fontsLoaded] = useFonts({
     Josefin: require("./assets/JosefinSans-Regular.ttf"),
   });
 
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
-
-  init()
-    .then(() => console.log("DB initialized"))
-    .catch((err) => {
+  const initializeDB = async () => {
+    try {
+      await init();
+    } catch (error) {
       console.log("Initialization DB failed");
-      console.log(err.message);
-    });
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    initializeDB();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // Muestra un componente de carga hasta que las fuentes estén cargadas
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,8 +48,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flex: 1,
-    backgroundColor: colors.lightGray,
+    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    backgroundColor: colors.lightBlue, // Cambiado a color de fondo lightBlue
   },
 });

@@ -13,7 +13,7 @@ const AuthTabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         header: () => {
-          return <Header title={"Welcome"} />;
+          return <Header />;
         },
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
@@ -29,7 +29,7 @@ const AuthTabNavigator = () => {
                 <FontAwesome5
                   name="sign-in-alt"
                   size={24}
-                  color={focused ? "black" : colors.lightGray}
+                  color={focused ? "black" : colors.tealBlue}
                 />
               </View>
             );
@@ -46,7 +46,7 @@ const AuthTabNavigator = () => {
                 <FontAwesome5
                   name="user-plus"
                   size={24}
-                  color={focused ? "black" : colors.lightGray}
+                  color={focused ? "black" : colors.tealBlue}
                 />
               </View>
             );

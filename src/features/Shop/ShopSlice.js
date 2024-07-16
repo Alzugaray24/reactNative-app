@@ -12,6 +12,7 @@ export const shopSlice = createSlice({
       products: productsData,
       categories: categoryData,
       filteredProducts: [],
+      favoriteItems: [],
     },
   },
   reducers: {
@@ -51,9 +52,23 @@ export const shopSlice = createSlice({
         const selectedProd = state.value.products.find(
           (item) => item.id === id
         );
-        state.value.productSelected = selectedProd || {}; // Asigna el producto encontrado o un objeto vacío
+        state.value.productSelected = selectedProd || {};
       } else {
-        state.value.productSelected = {}; // Si no hay ID válido, asigna un objeto vacío
+        state.value.productSelected = {};
+      }
+    },
+    setFavoriteItems: (state, action) => {
+      const product = action.payload.favorite;
+      if (product) {
+        const favoriteProds = state.value.favoriteItems;
+        const existe = favoriteProds.some((item) => item.id === product.id);
+        if (!existe) {
+          state.value.favoriteItems = [...favoriteProds, product];
+        } else {
+          state.value.favoriteItems = favoriteProds.filter(
+            (item) => item.id !== product.id
+          );
+        }
       }
     },
   },
@@ -65,6 +80,7 @@ export const {
   setSearchWord,
   setProductById,
   setFilteredProductsByWord,
+  setFavoriteItems,
 } = shopSlice.actions;
 
 export default shopSlice.reducer;

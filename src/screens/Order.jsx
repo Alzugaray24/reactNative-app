@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import OrderItem from "../components/OrderItem";
-import { useGetOrdersByUserQuery } from "../services/shopServices"; // Ajusta la ruta según sea necesario
+import { useGetOrdersByUserQuery } from "../services/shopServices";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrders } from "../features/Order/OrderSlice";
 
@@ -60,8 +60,7 @@ export default Order;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
+    paddingHorizontal: 30,
   },
   loadingContainer: {
     flex: 1,

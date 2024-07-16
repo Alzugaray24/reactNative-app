@@ -1,5 +1,5 @@
-import { Image, Pressable, StyleSheet, Text } from "react-native";
 import React from "react";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import Card from "./Card";
 import { colors } from "../global/colors";
 
@@ -9,9 +9,9 @@ const ProductItem = ({ product, navigation }) => {
   };
 
   return (
-    <Card style={styles.additionalStylesCard}>
-      <Pressable style={styles.pressable} onPress={handleNavigate}>
-        <Text style={styles.textCategory}>{product.title}</Text>
+    <Card style={styles.card}>
+      <Pressable style={styles.content} onPress={handleNavigate}>
+        <Text style={styles.title}>{product.title}</Text>
         <Image
           resizeMode="cover"
           style={styles.image}
@@ -25,28 +25,40 @@ const ProductItem = ({ product, navigation }) => {
 export default ProductItem;
 
 const styles = StyleSheet.create({
-  image: {
-    height: 120,
-    width: "30%",
-    borderRadius: 8,
-  },
-  additionalStylesCard: {
-    height: 120,
-    width: 300,
-    margin: 10,
-    paddingLeft: 10,
-    justifyContent: "space-between",
-    flexDirection: "row",
-  },
-  textCategory: {
-    color: colors.green900,
-    width: "70%",
-  },
-  pressable: {
-    width: "100%",
+  card: {
+    height: 160,
+    width: "90%",
+    marginVertical: 10,
+    marginHorizontal: "5%",
+    padding: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingLeft: 10,
+    backgroundColor: colors.lightBlue,
+    borderRadius: 12,
+    shadowColor: colors.gray700,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  content: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: colors.blueDark,
+    flexShrink: 1,
+    marginRight: 10,
+  },
+  image: {
+    height: 120,
+    width: 120,
+    borderRadius: 10,
   },
 });

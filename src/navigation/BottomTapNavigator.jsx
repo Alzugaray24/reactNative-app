@@ -1,105 +1,70 @@
-import { StyleSheet, Text, View } from "react-native";
-
+import React from "react";
+import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStackNavigator from "./HomeStackNavigator";
 import CartStackNavigator from "./CartStackNavigator";
 import OrderStackNavigator from "./OrderStackNavigator";
 import Header from "../components/Header";
 import { colors } from "../global/colors";
-
 import { FontAwesome5 } from "@expo/vector-icons";
 import ProfileStackNavigator from "./ProfileStackNavigator";
+import FavoriteStackNavigator from "./FavoriteStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
-const BottomTapNavigator = () => {
+const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        header: () => {
-          return <Header title={route.name} />;
-        },
+        header: () => <Header title={route.name} />,
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Shop") {
+            iconName = "store";
+          } else if (route.name === "Cart") {
+            iconName = "shopping-cart";
+          } else if (route.name === "Order") {
+            iconName = "receipt";
+          } else if (route.name === "Favorite") {
+            iconName = "heart";
+          } else if (route.name === "profile") {
+            iconName = "user-alt";
+          }
+
+          return (
+            <View style={styles.tabIcon}>
+              <FontAwesome5
+                name={iconName}
+                size={size}
+                color={focused ? colors.black : colors.tealBlue}
+              />
+            </View>
+          );
+        },
       })}
     >
-      <Tab.Screen
-        name="Shop"
-        component={HomeStackNavigator}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <View>
-                <FontAwesome5
-                  name="store"
-                  size={24}
-                  color={focused ? "black" : colors.lightGray}
-                />
-              </View>
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Cart"
-        component={CartStackNavigator}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <View>
-                <FontAwesome5
-                  name="shopping-cart"
-                  size={24}
-                  color={focused ? "black" : colors.lightGray}
-                />
-              </View>
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Order"
-        component={OrderStackNavigator}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <View>
-                <FontAwesome5
-                  name="receipt"
-                  size={24}
-                  color={focused ? "black" : colors.lightGray}
-                />
-              </View>
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="profile"
-        component={ProfileStackNavigator}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <View>
-                <FontAwesome5
-                  name="user-alt"
-                  size={24}
-                  color={focused ? "black" : colors.lightGray}
-                />
-              </View>
-            );
-          },
-        }}
-      />
+      <Tab.Screen name="Shop" component={HomeStackNavigator} />
+      <Tab.Screen name="Cart" component={CartStackNavigator} />
+      <Tab.Screen name="Order" component={OrderStackNavigator} />
+      <Tab.Screen name="Favorite" component={FavoriteStackNavigator} />
+      <Tab.Screen name="profile" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );
 };
 
-export default BottomTapNavigator;
-
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: colors.green700,
+    backgroundColor: colors.blueLight,
     height: 60,
   },
+  tabIcon: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
 });
+
+export default BottomTabNavigator;

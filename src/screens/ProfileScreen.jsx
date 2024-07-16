@@ -47,7 +47,7 @@ const ProfileScreen = ({ navigation }) => {
           const localId = sessions[0].localId;
           const result = await logoutSession(localId);
           dispatch(setLogout());
-          Alert.alert("Sesion cerrada con exito");
+          Alert.alert("Sesión cerrada con éxito");
         } else {
           Alert.alert("No se encontraron sesiones.");
         }
@@ -76,7 +76,10 @@ const ProfileScreen = ({ navigation }) => {
         />
 
         <AddButton title="Logout" onPress={() => onLogout()} />
-        <Text>Email: {user}</Text>
+        <Text style={styles.emailText}>
+          <Text style={styles.emailLabel}>Email:</Text>{" "}
+          <Text style={styles.emailValue}>{user}</Text>
+        </Text>
       </View>
     );
   };
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    marginTop: 20,
+    justifyContent: "space-evenly",
   },
   loadingContainer: {
     justifyContent: "center",
@@ -99,5 +102,18 @@ const styles = StyleSheet.create({
     height: 200,
     width: 200,
     borderRadius: 100,
+  },
+  emailText: {
+    fontSize: 16,
+    color: colors.gray800,
+    marginTop: 10,
+    textAlign: "center",
+  },
+  emailLabel: {
+    fontWeight: "bold",
+    color: colors.green900,
+  },
+  emailValue: {
+    color: colors.green700,
   },
 });

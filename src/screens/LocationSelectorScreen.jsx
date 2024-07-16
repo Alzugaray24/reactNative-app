@@ -40,8 +40,6 @@ const LocationSelectorScreen = () => {
     }
   };
 
-  console.log(location);
-
   return (
     <View style={styles.container}>
       <Text style={styles.addressTitle}>My address: </Text>

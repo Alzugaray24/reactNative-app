@@ -65,6 +65,7 @@ const SignUpScreen = () => {
         keyboardType="email-address"
         autoCapitalize="none"
         error={errorEmail}
+        style={styles.input}
       />
       <InputText
         placeholder="Contraseña"
@@ -73,6 +74,7 @@ const SignUpScreen = () => {
         secureTextEntry
         autoCapitalize="none"
         error={errorPassword}
+        style={styles.input}
       />
       <InputText
         placeholder="Confirmar Contraseña"
@@ -81,11 +83,13 @@ const SignUpScreen = () => {
         secureTextEntry
         autoCapitalize="none"
         error={errorConfirm}
+        style={styles.input}
       />
       <ActionButton
         title="Registrarse"
         onPress={handleSignUp}
         isLoading={isLoading}
+        style={styles.button}
       />
       {error && <Text style={styles.error}>{error}</Text>}
     </View>
@@ -97,17 +101,31 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.green300,
+    backgroundColor: colors.tabBar,
     padding: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
+    color: colors.blueDark,
     marginBottom: 20,
   },
+  input: {
+    width: "100%",
+    backgroundColor: colors.white,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    marginBottom: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.gray300,
+  },
+  button: {
+    width: "100%",
+    marginTop: 20,
+  },
   error: {
-    color: "red",
+    color: colors.red,
     marginTop: 10,
   },
 });

@@ -62,7 +62,7 @@ const LoginScreen = ({ navigation }) => {
             Alert.alert({ errInsertData: err.message });
           });
       } else {
-        Alert.alert("Ya hay una sesion activa");
+        Alert.alert("Ya hay una sesión activa");
       }
 
       dispatch(
@@ -104,6 +104,7 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        style={styles.input}
       />
       <InputText
         placeholder="Contraseña"
@@ -112,8 +113,9 @@ const LoginScreen = ({ navigation }) => {
         secureTextEntry
         autoCapitalize="none"
         error={errorPassword}
+        style={styles.input}
       />
-      <ActionButton title="Login" onPress={handleLogin} />
+      <ActionButton title="Login" onPress={handleLogin} style={styles.button} />
     </View>
   );
 };
@@ -123,14 +125,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.green300,
+    backgroundColor: colors.tabBar,
     padding: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
+    color: colors.black,
     marginBottom: 20,
+  },
+  input: {
+    width: "100%",
+    backgroundColor: colors.white,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    marginBottom: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.gray100,
+  },
+  button: {
+    width: "100%",
+    marginTop: 20,
   },
 });
 

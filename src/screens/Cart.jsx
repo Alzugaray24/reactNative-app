@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,9 +6,7 @@ import {
   FlatList,
   Pressable,
   ActivityIndicator,
-  isLoading,
-  isError,
-  Alert,
+  Modal,
 } from "react-native";
 import CartItem from "../components/CartItem";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,15 +14,17 @@ import {
   usePostOrderMutation,
   useGetCartItemsByUserQuery,
 } from "../services/shopServices";
-import { clearCart, setCartItems } from "../features/Cart/CartSlice";
+import { clearCart } from "../features/Cart/CartSlice";
 import { colors } from "../global/colors";
 import { addOrderItem } from "../features/Order/OrderSlice";
 
 const CartScreen = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const total = useSelector((state) => state.cart.value.total);
   const user = useSelector((state) => state.auth.user);
-  const [postOrder] = usePostOrderMutation();
+  const [postOrder, { isLoading, isError }] = usePostOrderMutation();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.value.items);
 
@@ -39,8 +39,15 @@ const CartScreen = () => {
         dispatch(clearCart());
       }, 3000);
     } catch (error) {
-      Alert.alert("Error al confirmar la orden", error);
+      console.error("Error al confirmar la orden:", error);
+      setErrorMessage("Error al confirmar la orden: " + error.message);
+      setShowErrorMessage(true);
     }
+  };
+
+  const closeModal = () => {
+    setShowSuccessMessage(false);
+    setShowErrorMessage(false);
   };
 
   return (
@@ -50,21 +57,7 @@ const CartScreen = () => {
           <ActivityIndicator size="large" color={colors.green700} />
         </View>
       )}
-      {showSuccessMessage && (
-        <View style={styles.successContainer}>
-          <Text style={styles.successText}>
-            ¡Orden confirmada exitosamente!
-          </Text>
-        </View>
-      )}
-      {isError && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>
-            Error al confirmar la orden: {error.message}
-          </Text>
-        </View>
-      )}
-      {!isLoading && !showSuccessMessage && !isError && (
+      {!isLoading && !isError && (
         <View style={styles.cartContent}>
           {cartItems.length === 0 ? (
             <View style={styles.emptyCartContainer}>
@@ -90,6 +83,28 @@ const CartScreen = () => {
           )}
         </View>
       )}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showSuccessMessage || showErrorMessage}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {showSuccessMessage && (
+              <Text style={styles.successText}>
+                ¡Orden confirmada exitosamente!
+              </Text>
+            )}
+            {showErrorMessage && (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            )}
+            <Pressable style={styles.closeButton} onPress={closeModal}>
+              <Text style={styles.closeButtonText}>Cerrar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -101,30 +116,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     padding: 20,
-    backgroundColor: "#f5f5f5",
   },
   loadingContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
-  successContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   successText: {
     fontSize: 18,
-    color: colors.green700,
-  },
-  errorContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    color: colors.white,
+    textAlign: "center",
   },
   errorText: {
     fontSize: 18,
     color: "red",
+    textAlign: "center",
   },
   emptyCartContainer: {
     flex: 1,
@@ -157,13 +163,37 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   confirmButtonText: {
-    color: "#fff",
+    color: colors.black,
     fontSize: 16,
     fontWeight: "bold",
   },
   totalText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: colors.green900,
+    color: colors.black,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    elevation: 5,
+  },
+  closeButton: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: colors.blueDark,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
