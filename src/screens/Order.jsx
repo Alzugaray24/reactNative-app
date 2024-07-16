@@ -45,7 +45,7 @@ const Order = () => {
       {orders && orders.length > 0 ? (
         <FlatList
           data={orders}
-          keyExtractor={(orderItem, index) => index.toString()} // Usamos el índice como clave
+          keyExtractor={(orderItem, index) => index.toString()}
           renderItem={({ item }) => <OrderItem order={item} />}
         />
       ) : (

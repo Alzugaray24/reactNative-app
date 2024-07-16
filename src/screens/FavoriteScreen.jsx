@@ -3,13 +3,12 @@ import { StyleSheet, Text, View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 import FavItem from "../components/FavItem";
 import { colors } from "../global/colors";
-import { queryFavorites } from "../db";
+import { queryFavorites, getDatabaseInfo } from "../db";
 
 const FavoriteScreen = () => {
   const [loading, setLoading] = useState(true);
   const [favProds, setFavProds] = useState([]);
   const localId = useSelector((state) => state.auth.localId);
-  //   const favProdsSlice = useSelector((state) => state.shop.favoriteItems);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -35,7 +34,7 @@ const FavoriteScreen = () => {
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
           data={favProds}
-          renderItem={({ item }) => <FavItem product={item} />} // Eliminada la función innecesaria
+          renderItem={({ item }) => <FavItem product={item} />}
         />
       ) : (
         <Text>No hay productos favoritos</Text>

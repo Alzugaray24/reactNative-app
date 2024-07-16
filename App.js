@@ -13,7 +13,12 @@ import Navigator from "./src/navigation/Navigator";
 
 import { Provider } from "react-redux";
 import store from "./src/store";
-import { init } from "./src/db";
+import {
+  deleteAllFavorites,
+  init,
+  getDatabaseInfo,
+  addLocalIdColumnToFavorites,
+} from "./src/db";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,6 +28,7 @@ export default function App() {
   const initializeDB = async () => {
     try {
       await init();
+      await addLocalIdColumnToFavorites();
     } catch (error) {
       console.log("Initialization DB failed");
       console.log(error.message);

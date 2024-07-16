@@ -54,14 +54,13 @@ const ItemDetail = ({ navigation, route }) => {
         const existe = allProds.some((item) => item.id === `${product.id}.0`);
 
         if (existe) {
-          // Mostrar alerta indicando que el producto ya está en favoritos
           Alert.alert("Aviso", "El producto ya está en tu lista de favoritos.");
         } else {
           await insertFavorite({
             id: product.id,
             title: product.title,
             image: product.thumbnail,
-            localId,
+            localId: localId,
           });
 
           showMessageModal("Agregado a favoritos");

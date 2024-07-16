@@ -23,6 +23,32 @@ export const init = () => {
   return promise;
 };
 
+export const addLocalIdColumnToFavorites = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `PRAGMA table_info(favorites);`,
+        [],
+        (_, { rows }) => {
+          const columns = rows._array.map((column) => column.name);
+          if (!columns.includes("localId")) {
+            tx.executeSql(
+              "ALTER TABLE favorites ADD COLUMN localId TEXT NOT NULL;",
+              [],
+              () => resolve(),
+              (_, error) => reject(error)
+            );
+          } else {
+            resolve();
+          }
+        },
+        (_, error) => reject(error)
+      );
+    });
+  });
+  return promise;
+};
+
 export const deleteDatabase = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
@@ -118,6 +144,27 @@ export const deleteFavorite = ({ id }) => {
         [id],
         (_, result) => res(result),
         (_, err) => rej(err)
+      );
+    });
+  });
+  return promise;
+};
+
+export const getDatabaseInfo = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "PRAGMA table_info(favorites);",
+        [],
+        (_, result) => {
+          const rows = result.rows;
+          const columns = [];
+          for (let i = 0; i < rows.length; i++) {
+            columns.push(rows.item(i));
+          }
+          resolve(columns);
+        },
+        (_, error) => reject(error)
       );
     });
   });
