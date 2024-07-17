@@ -5,12 +5,12 @@ export const shopApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
     getCategories: builder.query({
-      query: () => `categorias.json`,
+      query: () => `categories.json`,
     }),
 
     getProductsByCategory: builder.query({
       query: (category) =>
-        `productos.json?orderBy="category"&equalTo="${category}"`,
+        `products.json?orderBy="category"&equalTo="${category}"`,
       transformResponse: (res) => {
         const transformedResponse = Object.values(res);
         return transformedResponse;
@@ -18,7 +18,7 @@ export const shopApi = createApi({
     }),
 
     getProductById: builder.query({
-      query: (productId) => `productos.json?orderBy="id"&equalTo=${productId}`,
+      query: (productId) => `products.json?orderBy="id"&equalTo=${productId}`,
       transformResponse: (res) => {
         const transformedResponse = Object.values(res);
         if (transformedResponse.length) return transformedResponse[0];

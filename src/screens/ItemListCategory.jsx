@@ -17,6 +17,8 @@ const ItemListCategory = ({ navigation, route }) => {
   const { data: products } = useGetProductsByCategoryQuery(categorySelected);
   const dispatch = useDispatch();
 
+  console.log(products);
+
   useEffect(() => {
     if (products) {
       dispatch(setProducts(products));

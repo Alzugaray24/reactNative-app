@@ -8,7 +8,7 @@ import { setUser } from "../features/Auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { loginSchema } from "../validations/auth/loginSchema";
 import { decodeJwtToken } from "../utils/jwtDecode";
-import { querySessions, insertSession } from "../db";
+import { querySessions, insertSession } from "../db/sessions";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");

@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 import FavItem from "../components/FavItem";
 import { colors } from "../global/colors";
-import { queryFavorites, getDatabaseInfo } from "../db";
+import { getDatabaseInfo } from "../db/sessions";
+import { queryFavorites } from "../db/favorite";
 
 const FavoriteScreen = () => {
   const [loading, setLoading] = useState(true);

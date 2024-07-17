@@ -13,12 +13,12 @@ import Navigator from "./src/navigation/Navigator";
 
 import { Provider } from "react-redux";
 import store from "./src/store";
+import { getAllSessions, initSessionsDb } from "./src/db/sessions";
 import {
-  deleteAllFavorites,
-  init,
-  getDatabaseInfo,
+  initFavoritesDb,
   addLocalIdColumnToFavorites,
-} from "./src/db";
+  getAllFavorites,
+} from "./src/db/favorite";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,8 +27,8 @@ export default function App() {
 
   const initializeDB = async () => {
     try {
-      await init();
-      await addLocalIdColumnToFavorites();
+      await initSessionsDb();
+      await initFavoritesDb();
     } catch (error) {
       console.log("Initialization DB failed");
       console.log(error.message);
@@ -40,7 +40,7 @@ export default function App() {
   }, []);
 
   if (!fontsLoaded) {
-    return null; // Muestra un componente de carga hasta que las fuentes estén cargadas
+    return null;
   }
 
   return (

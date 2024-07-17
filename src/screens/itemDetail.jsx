@@ -11,10 +11,9 @@ import {
 } from "react-native";
 import { addCartItem } from "../features/Cart/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { insertFavorite } from "../db";
 import { useGetProductByIdQuery } from "../services/shopServices";
 import { setFavoriteItems } from "../features/Shop/ShopSlice";
-import { queryFavorites } from "../db";
+import { queryFavorites, insertFavorite } from "../db/favorite";
 import { colors } from "../global/colors";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -49,6 +48,7 @@ const ItemDetail = ({ navigation, route }) => {
 
   const onAddFavorite = async () => {
     if (product) {
+      console.log(product);
       try {
         const allProds = await queryFavorites(localId);
         const existe = allProds.some((item) => item.id === `${product.id}.0`);

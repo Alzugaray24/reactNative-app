@@ -13,9 +13,10 @@ import AddButton from "../components/AddButton";
 import { useGetProfileImageQuery } from "../services/shopServices";
 import { setImageProfile } from "../features/Auth/AuthSlice";
 import { getLastProfileImage } from "../utils/lastImageSelector";
-import { logoutSession } from "../db";
+import { logoutSession } from "../db/sessions";
 import { setLogout } from "../features/Auth/AuthSlice";
-import { querySessions } from "../db";
+import { querySessions } from "../db/sessions";
+import { logoutFavorites } from "../db/favorite";
 
 const ProfileScreen = ({ navigation }) => {
   const user = useSelector((state) => state.auth.user);
@@ -46,6 +47,7 @@ const ProfileScreen = ({ navigation }) => {
         if (sessions.length > 0) {
           const localId = sessions[0].localId;
           const result = await logoutSession(localId);
+          const favorites = await logoutFavorites(localId);
           dispatch(setLogout());
           Alert.alert("Sesión cerrada con éxito");
         } else {

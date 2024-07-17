@@ -16,7 +16,7 @@ const ProductItem = ({ product, navigation }) => {
         <Image
           resizeMode="cover"
           style={styles.image}
-          source={{ uri: product.images[0] }}
+          source={{ uri: product.thumbnail }}
         />
       </Pressable>
     </Card>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     marginHorizontal: "5%",
     padding: 15,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "center",
     backgroundColor: colors.lightBlue,
     borderRadius: 12,
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-evenly",
   },
   title: {
     fontSize: 18,

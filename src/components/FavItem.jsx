@@ -4,7 +4,7 @@ import { colors } from "../global/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import { setFavoriteItems } from "../features/Shop/ShopSlice";
-import { deleteFavorite } from "../db";
+import { deleteFavorite } from "../db/favorite";
 
 const FavItem = ({ product }) => {
   const dispatch = useDispatch();
@@ -27,6 +27,11 @@ const FavItem = ({ product }) => {
 
   return (
     <View style={styles.container}>
+      <Image
+        resizeMode="cover"
+        style={styles.image}
+        source={{ uri: product.thumbnail }}
+      />
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{product.title}</Text>
       </View>
@@ -37,9 +42,7 @@ const FavItem = ({ product }) => {
         animationType="fade"
         transparent={true}
         visible={showModal}
-        onRequestClose={() => {
-          setShowModal(false);
-        }}
+        onRequestClose={() => setShowModal(false)}
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
@@ -68,6 +71,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3.84,
     elevation: 5,
+    backgroundColor: colors.white,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
   },
   infoContainer: {
     flex: 1,
