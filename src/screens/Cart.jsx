@@ -28,6 +28,8 @@ const CartScreen = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.value.items);
 
+  console.log(cartItems);
+
   const confirmCart = async () => {
     try {
       dispatch(addOrderItem({ total, cartItems, user }));

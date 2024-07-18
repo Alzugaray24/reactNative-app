@@ -11,11 +11,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { colors } from "../global/colors";
 import AddButton from "../components/AddButton";
 import { useGetProfileImageQuery } from "../services/shopServices";
-import { setImageProfile } from "../features/Auth/AuthSlice";
-import { getLastProfileImage } from "../utils/lastImageSelector";
-import { logoutSession } from "../db/sessions";
-import { setLogout } from "../features/Auth/AuthSlice";
-import { querySessions } from "../db/sessions";
+import { setImageProfile, setLogout } from "../features/Auth/AuthSlice";
+import { logoutSession, querySessions } from "../db/sessions";
 import { logoutFavorites } from "../db/favorite";
 
 const ProfileScreen = ({ navigation }) => {
@@ -26,70 +23,62 @@ const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (data && Object.keys(data).length > 0) {
-      const lastProfileImage = getLastProfileImage(data);
-      dispatch(setImageProfile(lastProfileImage));
+    if (data && data.image) {
+      dispatch(setImageProfile(data.image));
+    } else {
+      dispatch(setImageProfile(null));
     }
   }, [data]);
 
-  const renderProfileContent = () => {
-    if (isLoading) {
-      return (
-        <View style={[styles.container, styles.loadingContainer]}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
-      );
-    }
-
-    const onLogout = async () => {
-      try {
-        const sessions = await querySessions();
-        if (sessions.length > 0) {
-          const localId = sessions[0].localId;
-          const result = await logoutSession(localId);
-          const favorites = await logoutFavorites(localId);
-          dispatch(setLogout());
-          Alert.alert("Sesión cerrada con éxito");
-        } else {
-          Alert.alert("No se encontraron sesiones.");
-        }
-      } catch (error) {
-        Alert.alert("Error al cerrar sesión:", error);
+  const handleLogout = async () => {
+    try {
+      const sessions = await querySessions();
+      if (sessions.length > 0) {
+        const localId = sessions[0].localId;
+        await logoutSession(localId);
+        await logoutFavorites(localId);
+        dispatch(setLogout());
+        dispatch(setImageProfile(null));
+        Alert.alert("Sesión cerrada con éxito");
+      } else {
+        Alert.alert("No se encontraron sesiones.");
       }
-    };
-
-    return (
-      <View style={styles.container}>
-        <Image
-          source={
-            profileImage
-              ? { uri: profileImage }
-              : require("../../assets/user.png")
-          }
-          style={styles.img}
-        />
-        <AddButton
-          title="Agregar foto de perfil"
-          onPress={() => navigation.navigate("ImageSelector")}
-        />
-        <AddButton
-          title="Mi dirección"
-          onPress={() => navigation.navigate("LocationSelector")}
-        />
-
-        <AddButton title="Cerrar Sesión" onPress={() => onLogout()} />
-        <Text style={styles.emailText}>
-          <Text style={styles.emailLabel}>Email:</Text>{" "}
-          <Text style={styles.emailValue}>{user}</Text>
-        </Text>
-      </View>
-    );
+    } catch (error) {
+      Alert.alert("Error al cerrar sesión:", error.message);
+    }
   };
 
-  return renderProfileContent();
+  return (
+    <View style={styles.container}>
+      <Image
+        source={
+          profileImage
+            ? { uri: profileImage }
+            : require("../../assets/user.png")
+        }
+        style={styles.img}
+      />
+      <AddButton
+        title="Agregar foto de perfil"
+        onPress={() => navigation.navigate("ImageSelector")}
+      />
+      <AddButton
+        title="Mi dirección"
+        onPress={() => navigation.navigate("LocationSelector")}
+      />
+      <AddButton title="Cerrar Sesión" onPress={handleLogout} />
+      <Text style={styles.emailText}>
+        <Text style={styles.emailLabel}>Email:</Text>{" "}
+        <Text style={styles.emailValue}>{user}</Text>
+      </Text>
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      )}
+    </View>
+  );
 };
-
-export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -119,3 +108,5 @@ const styles = StyleSheet.create({
     color: colors.green700,
   },
 });
+
+export default ProfileScreen;

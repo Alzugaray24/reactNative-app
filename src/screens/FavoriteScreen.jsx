@@ -6,7 +6,7 @@ import { colors } from "../global/colors";
 import { getDatabaseInfo } from "../db/sessions";
 import { queryFavorites } from "../db/favorite";
 
-const FavoriteScreen = () => {
+const FavoriteScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [favProds, setFavProds] = useState([]);
   const localId = useSelector((state) => state.auth.localId);
@@ -35,7 +35,9 @@ const FavoriteScreen = () => {
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
           data={favProds}
-          renderItem={({ item }) => <FavItem product={item} />}
+          renderItem={({ item }) => (
+            <FavItem product={item} navigation={navigation} />
+          )}
         />
       ) : (
         <Text style={styles.contentText}>No hay productos favoritos</Text>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -12,10 +12,9 @@ import {
 import { addCartItem } from "../features/Cart/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetProductByIdQuery } from "../services/shopServices";
-import { setFavoriteItems } from "../features/Shop/ShopSlice";
-import { queryFavorites, insertFavorite } from "../db/favorite";
 import { colors } from "../global/colors";
 import { AntDesign } from "@expo/vector-icons";
+import { queryFavorites, insertFavorite } from "../db/favorite";
 
 const ItemDetail = ({ navigation, route }) => {
   const localId = useSelector((state) => state.auth.localId);
@@ -36,7 +35,7 @@ const ItemDetail = ({ navigation, route }) => {
     setTimeout(() => {
       setShowMessage(false);
       setMessage("");
-    }, 1000); // Mostrar mensaje por 1 segundo
+    }, 1000);
   };
 
   const onAddCart = () => {
@@ -48,7 +47,6 @@ const ItemDetail = ({ navigation, route }) => {
 
   const onAddFavorite = async () => {
     if (product) {
-      console.log(product);
       try {
         const allProds = await queryFavorites(localId);
         const existe = allProds.some((item) => item.id === `${product.id}.0`);
@@ -59,8 +57,14 @@ const ItemDetail = ({ navigation, route }) => {
           await insertFavorite({
             id: product.id,
             title: product.title,
-            image: product.thumbnail,
             localId: localId,
+            thumbnail: product.thumbnail,
+            brand: product.brand,
+            category: product.category,
+            description: product.description,
+            discountPercentage: product.discountPercentage,
+            stock: product.stock,
+            price: product.price,
           });
 
           showMessageModal("Agregado a favoritos");
@@ -70,7 +74,6 @@ const ItemDetail = ({ navigation, route }) => {
         Alert.alert("Error", "Ocurrió un error al agregar a favoritos");
       }
     }
-    dispatch(setFavoriteItems({ favorite: product }));
   };
 
   if (!product || !Object.keys(product).length) {
@@ -178,9 +181,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 8,
     alignItems: "center",
+    backgroundColor: colors.black,
   },
   actionButtonText: {
-    color: "black",
+    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -199,14 +203,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20,
     alignItems: "center",
+    flexDirection: "row",
   },
   buttonText: {
     color: "black",
-    fontSize: 10,
+    fontSize: 16,
     fontWeight: "bold",
+    marginRight: 10,
   },
   successMessage: {
-    color: colors.white,
+    color: colors.black,
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
@@ -221,6 +227,7 @@ const styles = StyleSheet.create({
   modalContent: {
     padding: 20,
     borderRadius: 10,
+    backgroundColor: colors.white,
     alignItems: "center",
     elevation: 5,
   },

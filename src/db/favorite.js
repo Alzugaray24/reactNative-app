@@ -2,11 +2,12 @@ import * as SQLite from "expo-sqlite";
 
 const favoritesDb = SQLite.openDatabase(`favorites.db`);
 
+// Inicializar la base de datos de favoritos
 export const initFavoritesDb = () => {
   const promise = new Promise((res, rej) => {
     favoritesDb.transaction((tx) => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS favorites (id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, image TEXT NOT NULL, localId TEXT NOT NULL)",
+        "CREATE TABLE IF NOT EXISTS favorites (id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, thumbnail TEXT NOT NULL, localId TEXT NOT NULL, brand TEXT NOT NULL, category TEXT NOT NULL, description TEXT NOT NULL, discountPercentage REAL NOT NULL, stock INTEGER NOT NULL, price REAL NOT NULL)",
         [],
         () => res(),
         (_, err) => rej(err)
@@ -16,13 +17,36 @@ export const initFavoritesDb = () => {
   return promise;
 };
 
-export const insertFavorite = ({ localId, title, image, id }) => {
+// Insertar un favorito en la base de datos
+export const insertFavorite = ({
+  id,
+  title,
+  thumbnail,
+  localId,
+  brand,
+  category,
+  description,
+  discountPercentage,
+  stock,
+  price,
+}) => {
   const promise = new Promise((res, rej) => {
     favoritesDb.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO favorites (localId, title, image, id) VALUES (?, ?, ?, ?);",
-        [localId, title, image, id],
-        (_, result) => res(result),
+        "INSERT INTO favorites (id, title, thumbnail, localId, brand, category, description, discountPercentage, stock, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        [
+          id,
+          title,
+          thumbnail,
+          localId,
+          brand,
+          category,
+          description,
+          discountPercentage,
+          stock,
+          price,
+        ],
+        (_, result) => res(console.log(result)),
         (_, err) => rej(err)
       );
     });
@@ -30,19 +54,7 @@ export const insertFavorite = ({ localId, title, image, id }) => {
   return promise;
 };
 
-export const getAllFavorites = () => {
-  return new Promise((resolve, reject) => {
-    favoritesDb.transaction((tx) => {
-      tx.executeSql(
-        "SELECT * FROM favorites;",
-        [],
-        (_, { rows }) => resolve(rows._array),
-        (_, error) => reject(error)
-      );
-    });
-  });
-};
-
+// Consultar los favoritos en la base de datos
 export const queryFavorites = (localId) => {
   const promise = new Promise((res, rej) => {
     favoritesDb.transaction((tx) => {
@@ -57,7 +69,6 @@ export const queryFavorites = (localId) => {
 
   return promise;
 };
-
 export const deleteAllFavorites = () => {
   const promise = new Promise((resolve, reject) => {
     favoritesDb.transaction((tx) => {
@@ -115,6 +126,19 @@ export const logoutFavorites = (localId) => {
         [localId],
         (_, result) => res(result),
         (_, err) => rej(err)
+      );
+    });
+  });
+};
+
+export const getAllFavorites = () => {
+  return new Promise((resolve, reject) => {
+    favoritesDb.transaction((tx) => {
+      tx.executeSql(
+        "SELECT * FROM favorites;",
+        [],
+        (_, { rows }) => resolve(rows._array),
+        (_, error) => reject(error)
       );
     });
   });

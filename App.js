@@ -18,6 +18,7 @@ import {
   initFavoritesDb,
   addLocalIdColumnToFavorites,
   getAllFavorites,
+  deleteAllFavorites,
 } from "./src/db/favorite";
 
 export default function App() {

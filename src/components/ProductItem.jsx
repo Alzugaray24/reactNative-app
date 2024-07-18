@@ -28,12 +28,11 @@ export default ProductItem;
 const styles = StyleSheet.create({
   card: {
     height: 160,
-    width: "90%",
+    width: "100%",
     marginVertical: 10,
-    marginHorizontal: "5%",
-    padding: 15,
+    // marginHorizontal: "5%",
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: colors.lightBlue,
     borderRadius: 12,
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-end",
   },
   title: {
     fontSize: 18,

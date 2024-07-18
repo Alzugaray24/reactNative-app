@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setFavoriteItems } from "../features/Shop/ShopSlice";
 import { deleteFavorite } from "../db/favorite";
 
-const FavItem = ({ product }) => {
+const FavItem = ({ product, navigation }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
 
@@ -25,6 +25,10 @@ const FavItem = ({ product }) => {
     }
   };
 
+  const handleViewDetails = () => {
+    navigation.navigate("favoriteDetail", { product }); // Pasando el producto como parámetro
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -34,10 +38,16 @@ const FavItem = ({ product }) => {
       />
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{product.title}</Text>
+        <Text style={styles.price}>${product.price}</Text>
       </View>
-      <Pressable onPress={handleFavoritePress} style={styles.favoriteButton}>
-        <Icon name="heart" size={24} color={colors.red} />
-      </Pressable>
+      <View style={styles.buttonContainer}>
+        <Pressable onPress={handleViewDetails} style={styles.detailsButton}>
+          <Icon name="information-circle" size={24} color={colors.blue} />
+        </Pressable>
+        <Pressable onPress={handleFavoritePress} style={styles.favoriteButton}>
+          <Icon name="heart" size={24} color={colors.red} />
+        </Pressable>
+      </View>
       <Modal
         animationType="fade"
         transparent={true}
@@ -87,6 +97,19 @@ const styles = StyleSheet.create({
     color: colors.green900,
     fontSize: 18,
     fontWeight: "bold",
+  },
+  price: {
+    color: colors.green700,
+    fontSize: 16,
+    marginTop: 4,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  detailsButton: {
+    padding: 10,
+    marginRight: 10,
   },
   favoriteButton: {
     padding: 10,
