@@ -1,8 +1,6 @@
 import React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import CategoryItem from "../components/CategoryItem";
-import { colors } from "../global/colors";
-import { useSelector } from "react-redux";
 import { useGetCategoriesQuery } from "../services/shopServices";
 
 const Home = ({ navigation, route }) => {

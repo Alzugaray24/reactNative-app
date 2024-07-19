@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import AddButton from "../components/AddButton";
 import { useDispatch } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
-import { setImageCamara, setImageProfile } from "../features/Auth/AuthSlice";
+import { setImageProfile } from "../features/Auth/AuthSlice";
 import { usePostProfileImageMutation } from "../services/shopServices";
 import { useSelector } from "react-redux";
 

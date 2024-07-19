@@ -10,7 +10,7 @@ import {
 } from "../features/Shop/ShopSlice.js";
 import { useGetProductsByCategoryQuery } from "../services/shopServices.js";
 
-const ItemListCategory = ({ navigation, route }) => {
+const ItemListCategory = ({ navigation }) => {
   const categorySelected = useSelector((state) => state.shop.categorySelected);
   const filteredProducts = useSelector((state) => state.shop.filteredProducts);
 

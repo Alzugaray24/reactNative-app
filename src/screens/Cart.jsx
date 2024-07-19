@@ -7,13 +7,11 @@ import {
   Pressable,
   ActivityIndicator,
   Modal,
+  Alert,
 } from "react-native";
 import CartItem from "../components/CartItem";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  usePostOrderMutation,
-  useGetCartItemsByUserQuery,
-} from "../services/shopServices";
+import { usePostOrderMutation } from "../services/shopServices";
 import { clearCart } from "../features/Cart/CartSlice";
 import { colors } from "../global/colors";
 import { addOrderItem } from "../features/Order/OrderSlice";
@@ -28,8 +26,6 @@ const CartScreen = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.value.items);
 
-  console.log(cartItems);
-
   const confirmCart = async () => {
     try {
       dispatch(addOrderItem({ total, cartItems, user }));
@@ -41,7 +37,7 @@ const CartScreen = () => {
         dispatch(clearCart());
       }, 3000);
     } catch (error) {
-      console.error("Error al confirmar la orden:", error);
+      Alert.alert("Error al confirmar la orden:", error);
       setErrorMessage("Error al confirmar la orden: " + error.message);
       setShowErrorMessage(true);
     }

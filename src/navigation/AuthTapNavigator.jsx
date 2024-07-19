@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 const AuthTabNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={() => ({
         header: () => {
           return <Header />;
         },

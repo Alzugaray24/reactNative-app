@@ -16,7 +16,7 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        header: () => <Header title={getTitle(route.name)} />, // Dynamic title based on route name
+        header: () => <Header title={getTitle(route.name)} />,
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
         tabBarIcon: ({ focused, color, size }) => {
@@ -60,9 +60,9 @@ const BottomTabNavigator = () => {
 
 const getTitle = (routeName) => {
   if (routeName === "Tienda") {
-    return "Thot Computación"; // Set your store name here
+    return "Tienda";
   } else {
-    return routeName; // Default to route name if not specified
+    return routeName;
   }
 };
 

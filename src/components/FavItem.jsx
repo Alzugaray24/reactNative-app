@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View, Modal } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Alert,
+} from "react-native";
 import { colors } from "../global/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
@@ -15,13 +23,12 @@ const FavItem = ({ product, navigation }) => {
 
     try {
       await deleteFavorite({ id: `${product.id}` });
-      console.log("Producto eliminado de favoritos");
       setShowModal(true);
       setTimeout(() => {
         setShowModal(false);
-      }, 1000); // Modal se muestra por 1 segundo
+      }, 1000);
     } catch (error) {
-      console.error("Error al eliminar favorito:", error);
+      Alert.alert("Error al eliminar favorito:", error);
     }
   };
 

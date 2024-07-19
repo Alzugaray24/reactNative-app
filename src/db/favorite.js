@@ -2,7 +2,6 @@ import * as SQLite from "expo-sqlite";
 
 const favoritesDb = SQLite.openDatabase(`favorites.db`);
 
-// Inicializar la base de datos de favoritos
 export const initFavoritesDb = () => {
   const promise = new Promise((res, rej) => {
     favoritesDb.transaction((tx) => {
@@ -17,7 +16,6 @@ export const initFavoritesDb = () => {
   return promise;
 };
 
-// Insertar un favorito en la base de datos
 export const insertFavorite = ({
   id,
   title,
@@ -46,7 +44,7 @@ export const insertFavorite = ({
           stock,
           price,
         ],
-        (_, result) => res(console.log(result)),
+        (_, result) => res(),
         (_, err) => rej(err)
       );
     });
@@ -54,7 +52,6 @@ export const insertFavorite = ({
   return promise;
 };
 
-// Consultar los favoritos en la base de datos
 export const queryFavorites = (localId) => {
   const promise = new Promise((res, rej) => {
     favoritesDb.transaction((tx) => {

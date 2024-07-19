@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Alert } from "react-native";
 import { useSelector } from "react-redux";
 import FavItem from "../components/FavItem";
-import { colors } from "../global/colors";
-import { getDatabaseInfo } from "../db/sessions";
 import { queryFavorites } from "../db/favorite";
 
 const FavoriteScreen = ({ navigation, route }) => {
@@ -17,7 +15,7 @@ const FavoriteScreen = ({ navigation, route }) => {
         const prods = await queryFavorites(localId);
         setFavProds(prods);
       } catch (error) {
-        console.error("Error fetching favorites:", error);
+        Alert.alert("Error fetching favorites:", error);
       } finally {
         setLoading(false);
       }

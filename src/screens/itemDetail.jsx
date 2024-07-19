@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -70,7 +70,6 @@ const ItemDetail = ({ navigation, route }) => {
           showMessageModal("Agregado a favoritos");
         }
       } catch (error) {
-        console.error("Error al agregar a favoritos:", error);
         Alert.alert("Error", "Ocurrió un error al agregar a favoritos");
       }
     }

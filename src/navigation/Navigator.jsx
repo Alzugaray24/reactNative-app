@@ -5,7 +5,7 @@ import BottomTapNavigator from "./BottomTapNavigator";
 import AuthTapNavigator from "./AuthTapNavigator";
 import { useDispatch, useSelector } from "react-redux";
 import { querySessions } from "../db/sessions";
-import { setUser } from "../features/Auth/AuthSlice"; // Asumiendo que tienes esta acción
+import { setUser } from "../features/Auth/AuthSlice";
 
 const Navigator = () => {
   const user = useSelector((state) => state.auth.user);

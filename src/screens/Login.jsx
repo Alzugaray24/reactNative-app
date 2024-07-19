@@ -10,7 +10,7 @@ import { loginSchema } from "../validations/auth/loginSchema";
 import { decodeJwtToken } from "../utils/jwtDecode";
 import { querySessions, insertSession } from "../db/sessions";
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [triggerLogin] = useLoginMutation();

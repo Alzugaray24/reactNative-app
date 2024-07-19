@@ -5,21 +5,15 @@ import {
   SafeAreaView,
   StatusBar,
   Platform,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { colors } from "./src/global/colors";
-
 import Navigator from "./src/navigation/Navigator";
-
 import { Provider } from "react-redux";
 import store from "./src/store";
-import { getAllSessions, initSessionsDb } from "./src/db/sessions";
-import {
-  initFavoritesDb,
-  addLocalIdColumnToFavorites,
-  getAllFavorites,
-  deleteAllFavorites,
-} from "./src/db/favorite";
+import { initSessionsDb } from "./src/db/sessions";
+import { initFavoritesDb } from "./src/db/favorite";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -31,8 +25,7 @@ export default function App() {
       await initSessionsDb();
       await initFavoritesDb();
     } catch (error) {
-      console.log("Initialization DB failed");
-      console.log(error.message);
+      Alert.alert(error.message);
     }
   };
 

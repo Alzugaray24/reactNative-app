@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { colors } from "../global/colors";
 import { useDispatch } from "react-redux";
@@ -11,7 +11,7 @@ const CartItem = ({ cartItem }) => {
     try {
       dispatch(removeCartItem(cartItem));
     } catch (error) {
-      console.error("Failed to remove cart item: ", error);
+      Alert.alert("Failed to remove cart item: ", error);
     }
   };
 

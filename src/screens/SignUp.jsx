@@ -34,7 +34,6 @@ const SignUpScreen = () => {
 
       Alert.alert("Éxito", "Cuenta creada exitosamente");
     } catch (err) {
-      console.log(err.path);
       switch (err.path) {
         case "email":
           setErrorEmail(err.message);

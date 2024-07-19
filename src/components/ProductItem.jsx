@@ -1,8 +1,7 @@
 import React from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text } from "react-native";
 import Card from "./Card";
 import { colors } from "../global/colors";
-import { useSelector } from "react-redux";
 
 const ProductItem = ({ product, navigation }) => {
   const handleNavigate = () => {
@@ -30,7 +29,6 @@ const styles = StyleSheet.create({
     height: 160,
     width: "100%",
     marginVertical: 10,
-    // marginHorizontal: "5%",
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
